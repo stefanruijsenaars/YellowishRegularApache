@@ -1,12 +1,11 @@
 import React from 'react';
 import './App.css';
-import { User  } from './model/test';
+import Repl from './components/repl';
 
-const x: User = { id: 3 };
-function App() {
+const App = () => {
   return (
     <main>
-      Stefan + React⚛️ + Vite⚡ + Replit🌀
+      <Repl />
     </main>
   );
 }
