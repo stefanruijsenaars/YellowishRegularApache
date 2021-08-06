@@ -1,40 +1,41 @@
 // Adapted from: https://github.com/seveibar/react-repl/blob/main/src/ReactReplView.js
 
-import React, { useRef, useState, useEffect } from "react"
-import styled from "styled-components"
-import CircularProgress from '@material-ui/core/CircularProgress';
+import React, { useRef, useState, useEffect } from "react";
+import styled from "styled-components";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 const Container = styled.div`
-  font-family: "IBM Plex Mono"; font-weight: bold;
+  font-family: "IBM Plex Mono";
+  font-weight: bold;
   color: #fff;
   background-color: #333;
   border-radius: 4px;
   box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.5);
   overflow: hidden;
-`
+`;
 const InputCarat = styled.div`
   color: #f48fb1;
   padding-right: 8px;
-`
+`;
 const InputLine = styled.div`
   display: flex;
   margin-top: 8px;
-`
+`;
 const ActiveInputLine = styled.div`
   display: flex;
   align-items: center;
   margin-top: 8px;
-`
+`;
 const Output = styled.div`
   color: #ccc;
   margin-top: 8px;
   white-space: pre-wrap;
-`
+`;
 const Error = styled.div`
   color: #d33;
   margin-top: 8px;
   white-space: pre-wrap;
-`
+`;
 const TextInput = styled.input`
   color: #fff;
   font-size: inherit;
@@ -44,11 +45,11 @@ const TextInput = styled.input`
   flex-grow: 1;
   caret-color: #f48fb1;
   background-color: transparent;
-  font-family: "IBM Plex Mono"; 
-`
+  font-family: "IBM Plex Mono";
+`;
 const Header = styled.div`
   display: flex;
-`
+`;
 
 const Title = styled.div`
   flex-grow: 1;
@@ -56,11 +57,11 @@ const Title = styled.div`
   padding-bottom: 12px;
   padding-left: 12px;
   color: #888;
-`
+`;
 const Tabs = styled.div`
   display: flex;
   padding-bottom: 8px;
-`
+`;
 const Tab = styled.div`
   padding: 8px;
   padding-left: 14px;
@@ -72,13 +73,13 @@ const Tab = styled.div`
     color: #64b5f6;
     cursor: auto;
   }
-`
+`;
 const TerminalContent = styled.div`
   padding: 16px;
   padding-top: 2px;
   height: ${(props) => props.height}px;
   overflow-y: auto;
-`
+`;
 
 export const ReplView = ({
   isSubmitting,
@@ -92,32 +93,34 @@ export const ReplView = ({
   lines,
   height,
 }) => {
-  const inputRef = useRef()
-  const terminalContentRef = useRef()
-  const [activeInputValue, setActiveInputValue] = useState("")
-  const [historySelectIndex, setHistorySelectIndex] = useState(-1)
+  const inputRef = useRef();
+  const terminalContentRef = useRef();
+  const [activeInputValue, setActiveInputValue] = useState("");
+  const [historySelectIndex, setHistorySelectIndex] = useState(-1);
   useEffect(() => {
-    if (!terminalContentRef.current) return
+    if (!terminalContentRef.current) return;
     terminalContentRef.current.scrollTop =
-      terminalContentRef.current.scrollHeight
-  }, [lines])
-  useEffect(() => setHistorySelectIndex(-1), [lines])
+      terminalContentRef.current.scrollHeight;
+  }, [lines]);
+  useEffect(() => setHistorySelectIndex(-1), [lines]);
 
   return (
     <Container onClick={() => (stealFocus ? inputRef.current.focus() : null)}>
       {(title || tabs) && (
         <Header>
           <Title>{title} </Title>
-          <Title>{ isSubmitting && <CircularProgress color="secondary" size={16}/> }</Title>
+          <Title>
+            {isSubmitting && <CircularProgress color="secondary" size={16} />}
+          </Title>
           {tabs && (
             <Tabs>
               {tabs.map((tab) => (
                 <Tab
                   className={tab === selectedTab ? "selected" : ""}
                   onClick={(e) => {
-                    onChangeTab(tab)
-                    e.stopPropagation()
-                    e.preventDefault()
+                    onChangeTab(tab);
+                    e.stopPropagation();
+                    e.preventDefault();
                   }}
                   key={tab}
                 >
@@ -140,7 +143,7 @@ export const ReplView = ({
             <Output key={i}>{line.value}</Output>
           ) : (
             <Error key={i}>{line.value.toString()}</Error>
-          )
+          ),
         )}
         <ActiveInputLine>
           <InputCarat>{">"}</InputCarat>
@@ -150,23 +153,23 @@ export const ReplView = ({
                 return;
               }
               if (e.key === "Enter") {
-                onSubmit(activeInputValue)
-                setActiveInputValue("")
+                onSubmit(activeInputValue);
+                setActiveInputValue("");
               } else if (e.key === "ArrowUp") {
-                const newHSI = historySelectIndex + 1
-                const inputs = lines.filter((l) => l.type === "input")
-                inputs.reverse()
+                const newHSI = historySelectIndex + 1;
+                const inputs = lines.filter((l) => l.type === "input");
+                inputs.reverse();
                 if (newHSI < inputs.length) {
-                  setActiveInputValue(inputs[newHSI].value)
-                  setHistorySelectIndex(newHSI)
+                  setActiveInputValue(inputs[newHSI].value);
+                  setHistorySelectIndex(newHSI);
                 }
               } else if (e.key === "ArrowDown") {
-                const newHSI = historySelectIndex - 1
-                const inputs = lines.filter((l) => l.type === "input")
-                inputs.reverse()
+                const newHSI = historySelectIndex - 1;
+                const inputs = lines.filter((l) => l.type === "input");
+                inputs.reverse();
                 if (newHSI >= 0) {
-                  setActiveInputValue(inputs[newHSI].value)
-                  setHistorySelectIndex(newHSI)
+                  setActiveInputValue(inputs[newHSI].value);
+                  setHistorySelectIndex(newHSI);
                 }
               }
             }}
@@ -177,7 +180,7 @@ export const ReplView = ({
         </ActiveInputLine>
       </TerminalContent>
     </Container>
-  )
-}
+  );
+};
 
-export default ReplView
+export default ReplView;
