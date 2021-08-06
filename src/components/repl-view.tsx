@@ -2,10 +2,10 @@
 
 import React, { useRef, useState, useEffect } from "react"
 import styled from "styled-components"
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 const Container = styled.div`
-  font-family: monospace;
-  font-weight: bold;
+  font-family: "IBM Plex Mono"; font-weight: bold;
   color: #fff;
   background-color: #333;
   border-radius: 4px;
@@ -44,11 +44,12 @@ const TextInput = styled.input`
   flex-grow: 1;
   caret-color: #f48fb1;
   background-color: transparent;
-  font-family: monospace;
+  font-family: "IBM Plex Mono"; 
 `
 const Header = styled.div`
   display: flex;
 `
+
 const Title = styled.div`
   flex-grow: 1;
   padding-top: 12px;
@@ -80,6 +81,7 @@ const TerminalContent = styled.div`
 `
 
 export const ReplView = ({
+  isSubmitting,
   title,
   stealFocus = true,
   tabs,
@@ -105,7 +107,8 @@ export const ReplView = ({
     <Container onClick={() => (stealFocus ? inputRef.current.focus() : null)}>
       {(title || tabs) && (
         <Header>
-          <Title>{title}</Title>
+          <Title>{title} </Title>
+          <Title>{ isSubmitting && <CircularProgress color="secondary" size={16}/> }</Title>
           {tabs && (
             <Tabs>
               {tabs.map((tab) => (
@@ -143,6 +146,9 @@ export const ReplView = ({
           <InputCarat>{">"}</InputCarat>
           <TextInput
             onKeyUp={(e) => {
+              if (isSubmitting) {
+                return;
+              }
               if (e.key === "Enter") {
                 onSubmit(activeInputValue)
                 setActiveInputValue("")
